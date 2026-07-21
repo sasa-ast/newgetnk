@@ -464,7 +464,7 @@ a {
 }
 
 .footer__container {
-    max-width: 1600px;
+    max-width: 85%;
     margin-inline: auto;
     padding: 25px 15px;
 }
