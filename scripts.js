@@ -15,7 +15,7 @@ document.querySelectorAll('a.hero__inf-link[href^="#"]').forEach(anchor => {
 
 const btnUp = {
   el: document.querySelector('#btn-up'),
-  footer: document.querySelector('footer'), // Находит ваш тег <footer>
+  footer: document.querySelector('footer'),
   
   show() { this.el.classList.remove('btn-up_hide'); },
   hide() { this.el.classList.add('btn-up_hide'); },
@@ -24,36 +24,36 @@ const btnUp = {
     const checkPosition = () => {
       const scrollY = window.scrollY || document.documentElement.scrollTop;
       
-      // 1. Показ и скрытие кнопки
+
       scrollY > 300 ? this.show() : this.hide();
       
-      // 2. Логика выталкивания кнопки футером
+
       if (this.footer) {
         const footerRect = this.footer.getBoundingClientRect();
         const windowHeight = window.innerHeight;
-        const defaultBottom = 25; // Стандартный отступ кнопки от края экрана (в px)
+        const defaultBottom = 25;
         
-        // Проверяем, появился ли футер в зоне видимости экрана
+
         if (footerRect.top < windowHeight) {
-          // Вычисляем, сколько пикселей футера уже видно на экране
+
           const footerVisibleHeight = windowHeight - footerRect.top;
-          // Новый отступ = высота видимой части футера + стандартный зазор
+
           const newBottom = footerVisibleHeight + defaultBottom;
           
           this.el.style.setProperty('--btn-bottom', `${newBottom}px`);
         } else {
-          // Если футера еще не видно, возвращаем стандартный отступ
+
           this.el.style.setProperty('--btn-bottom', `${defaultBottom}px`);
         }
       }
     };
 
-    // Запуск проверок
+
     checkPosition();
     window.addEventListener('scroll', checkPosition);
     window.addEventListener('resize', checkPosition);
 
-    // Клик наверх
+
     this.el.addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
@@ -62,4 +62,18 @@ const btnUp = {
 
 document.addEventListener('DOMContentLoaded', () => {
   btnUp.addEventListener();
+});
+
+document.body.classList.add('preloader-active');
+
+window.addEventListener('load', () => {
+  const preloader = document.querySelector('#preloader');
+  
+  if (preloader) {
+
+    setTimeout(() => {
+      preloader.classList.add('preloader_hide');
+      document.body.classList.remove('preloader-active');
+    }, 400); 
+  }
 });
