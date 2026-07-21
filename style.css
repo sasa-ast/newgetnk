@@ -34,7 +34,7 @@ body {
 }
 
 .header__container, .hero__container, .raspisanie__container, .scheme__container, .lgot__container, .tarif__container, .strah__container {
-    max-width: 1600px;
+    max-width: 84%;
     margin-inline: auto;
 }
 
@@ -526,15 +526,4 @@ a {
     max-width: 130px;
     padding-top: 30px;
     padding-right: 10px;
-}
-
-@media (max-width: 1600px) {
-  
-  .container {
-    max-width: 1500px;
-  }
-  
-  .your-element-class {
-    width: 100%;
-  }
 }
