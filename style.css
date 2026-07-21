@@ -16,7 +16,7 @@ html {
     scroll-behavior: smooth;
     width: 100%;
     max-width: 1920px;
-    min-width: 1700px;
+    min-width: 1800px;
     margin: 0 auto; 
     margin: 0 auto;
 }
@@ -34,7 +34,7 @@ body {
 }
 
 .header__container, .hero__container, .raspisanie__container, .scheme__container, .lgot__container, .tarif__container, .strah__container {
-    max-width: 84%;
+    max-width: 85%;
     margin-inline: auto;
 }
 
