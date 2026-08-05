@@ -3,7 +3,7 @@ export default async function handler(request, response) {
     response.setHeader('Access-Control-Allow-Origin', '*');
     response.setHeader('Content-Type', 'application/json');
 
-    const TOKEN = 'ac29061aac29061aac29061a03af6bc06faac29ac29061ac65bc87319d151a0cac0d4dc'; 
+    const TOKEN = '0f0704400f0704400f0704405d0c45c2ff00f070f0704406575e6b37eb57d7c630a3ce9'; 
     const GROUP_ID = '-137432399'; // Убедись, что тут твой ID С МИНУСОМ!
     const VERSION = '5.199';
     const COUNT = 10; 
