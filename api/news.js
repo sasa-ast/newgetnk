@@ -7,7 +7,7 @@ export default async function handler(request, response) {
 
     // Твои данные для авторизации
     const TOKEN = '49e5481149e5481149e54811dd4aa78ec2449e549e548112397aef0d3149a1a1f131e96'; 
-    const GROUP_ID = '-137432399'; // Вводи сюда ТОЛЬКО ЦИФРЫ (БЕЗ минуса!)
+    const GROUP_ID = '137432399'; // Вводи сюда ТОЛЬКО ЦИФРЫ (БЕЗ минуса!)
     const VERSION = '5.199';
     const COUNT = 10; 
 
