@@ -1,68 +1,68 @@
 // js/news.js
 
-// 1. Глобальная функция, которую вызовет ВКонтакте, когда пришлет новости
+// 1. Эта функция ПРИНИМАЕТ данные от ВК
 window.parseVkNews = function(data) {
+    console.log("Данные от ВК успешно получены:", data); // Проверим в консоли F12
+    
     const newsContainer = document.getElementById('news-container');
     if (!newsContainer) return;
 
-    // Проверяем, нет ли ошибки от ВК
     if (data.error) {
-        console.error("Ошибка ВК:", data.error.error_msg);
-        newsContainer.innerHTML = '<p>Не удалось загрузить новости предприятия.</p>';
+        newsContainer.innerHTML = '<p>Ошибка VK: ' + data.error.error_msg + '</p>';
         return;
     }
 
     const posts = data.response.items;
-    newsContainer.innerHTML = ''; // Очищаем контейнер от текста "Загрузка..."
+    newsContainer.innerHTML = ''; // Стираем "Загрузка..."
 
-    // Перебираем посты и строим твои карточки
     posts.forEach(post => {
-        // Пропускаем посты, если в них нет ни текста, ни вложений
         if (!post.text && !post.attachments) return;
 
         const postDate = new Date(post.date * 1000).toLocaleDateString('ru-RU');
 
-        // Ищем картинку в посте
+        // Ищем картинку
         let imageUrl = '';
         if (post.attachments) {
-            const photoAttachment = post.attachments.find(att => att.type === 'photo');
-            if (photoAttachment) {
-                const sizes = photoAttachment.photo.sizes;
-                imageUrl = sizes[sizes.length - 1].url; // Самая крупная картинка
+            const photo = post.attachments.find(att => att.type === 'photo');
+            if (photo) {
+                imageUrl = photo.photo.sizes[photo.photo.sizes.length - 1].url;
             }
         }
 
-        // Создаем HTML-карточку новости в твоем фирменном стиле
+        // Создаем карточку
         const card = document.createElement('div');
         card.className = 'news-card';
         card.innerHTML = `
             ${imageUrl ? `<img src="${imageUrl}" alt="Новость" class="news-img">` : ''}
             <div class="news-content">
                 <span class="news-date">${postDate}</span>
-                <p class="news-text">${post.text ? post.text.substring(0, 200) + '...' : 'Фотоотчет'}</p> 
+                <p class="news-text">${post.text || 'Фотоотчет'}</p> 
                 <a href="https://vk.com{post.owner_id}_${post.id}" target="_blank" class="news-link">Читать в VK</a>
             </div>
         `;
-        
         newsContainer.appendChild(card);
     });
 };
 
-// 2. Функция, которая запрашивает данные у ВК через технологию JSONP
+// 2. Эта функцияОТПРАВЛЯЕТ запрос в ВК
 function loadVkNewsJSONP() {
-    const TOKEN = '49e5481149e5481149e54811dd4aa78ec2449e549e548112397aef0d3149a1a1f131e96';
-    const GROUP_ID = '137432399';
-    
-    // Формируем ссылку. Обрати внимание на параметр callback=parseVkNews в конце!
-    // Он заставляет ВК обернуть ответ в функцию, которую мы создали выше
-    const url = "https://vk.com/" + GROUP_ID + "&count=10&filter=owner&access_token=" + TOKEN + "&v=5.199&callback=parseVkNews";
+    const token = '49e5481149e5481149e54811dd4aa78ec2449e549e548112397aef0d3149a1a1f131e96';
+    const groupId = '137432399';
+    const url = "https://vk.com" + groupId + "&count=10&filter=owner&access_token=" + token + "&v=5.199&callback=parseVkNews";
 
-    // Создаем невидимый тег <script> и вставляем его в HTML. 
-    // Это обходит любые блокировки CORS и ограничения серверов Vercel!
+    console.log("Запускаем запрос к адресу:", url);
+
     const script = document.createElement('script');
     script.src = url;
+    
+    // Подстраховка: если сам скрипт не сможет загрузиться из-за блокировки сети
+    script.onerror = function() {
+        console.error("Сбой сети! Не удалось загрузить скрипт ВК.");
+        const container = document.getElementById('news-container');
+        if (container) container.innerHTML = '<p>Сбой сети. Проверьте подключение или VPN.</p>';
+    };
+
     document.body.appendChild(script);
 }
 
-// Запускаем загрузку сразу после готовности страницы
 document.addEventListener('DOMContentLoaded', loadVkNewsJSONP);
