@@ -48,14 +48,23 @@ window.parseVkNews = function(data) {
 function loadVkNewsJSONP() {
     const token = '49e5481149e5481149e54811dd4aa78ec2449e549e548112397aef0d3149a1a1f131e96';
     const groupId = '137432399';
-    const url = "https://vk.com" + groupId + "&count=10&filter=owner&access_token=" + token + "&v=5.199&callback=parseVkNews";
+
+    // Разбиваем адрес на безопасные части, чтобы ни один символ не стерся
+    const protocol = "https://";
+    const domain = "://vk.com";
+    const path = "/method/wall.get";
+    
+    // Собираем параметры
+    const params = "?owner_id=-" + groupId + "&count=10&filter=owner&access_token=" + token + "&v=5.199&callback=parseVkNews";
+
+    // Склеиваем всё вместе строго по порядку
+    const url = protocol + domain + path + params;
 
     console.log("Запускаем запрос к адресу:", url);
 
     const script = document.createElement('script');
     script.src = url;
     
-    // Подстраховка: если сам скрипт не сможет загрузиться из-за блокировки сети
     script.onerror = function() {
         console.error("Сбой сети! Не удалось загрузить скрипт ВК.");
         const container = document.getElementById('news-container');
@@ -65,4 +74,3 @@ function loadVkNewsJSONP() {
     document.body.appendChild(script);
 }
 
-document.addEventListener('DOMContentLoaded', loadVkNewsJSONP);
