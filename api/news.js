@@ -1,22 +1,18 @@
 // api/news.js
 export default async function handler(request, response) {
-    // Включаем CORS-заголовки
-    response.setHeader('Access-Control-Allow-Origin', '*');
-    response.setHeader('Access-Control-Allow-Methods', 'GET');
-    response.setHeader('Content-Type', 'application/json; charset=utf-8');
-
     // 1. ТВОИ ДАННЫЕ ДЛЯ АВТОРИЗАЦИИ
     const TOKEN = '49e5481149e5481149e54811dd4aa78ec2449e549e548112397aef0d3149a1a1f131e96'; 
-    const GROUP_ID = '137432399'; // Твой ID группы предприятия
+    const GROUP_ID = '137432399'; // Твой ID группы
     const VERSION = '5.199';
     const COUNT = '10'; 
 
-    // 2. БЕЗОПАСНАЯ СБОРКА АДРЕСА ПО КУСОЧКАМ (чтобы ничего не потерялось)
-    const base = "https://vk.com";
+    // 2. ИСПОЛЬЗУЕМ АЛЬТЕРНАТИВНЫЙ АДРЕС (api.vk.ru вместо api.vk.com)
+    // Это гарантирует, что ВК не перенаправит запрос на главную страницу vk.com
+    const base = "https://vk.ru";
     const params = "?owner_id=-" + GROUP_ID + "&count=" + COUNT + "&filter=owner&access_token=" + TOKEN + "&v=" + VERSION;
     
-    // Итоговый полный URL
     const vkUrl = base + params;
+
 
     try {
         const vkResponse = await fetch(vkUrl, {
