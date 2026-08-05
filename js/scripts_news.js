@@ -55,7 +55,7 @@ function loadVkNewsJSONP() {
     
     // Формируем ссылку. Обрати внимание на параметр callback=parseVkNews в конце!
     // Он заставляет ВК обернуть ответ в функцию, которую мы создали выше
-    const url = "https://vk.com" + GROUP_ID + "&count=10&filter=owner&access_token=" + TOKEN + "&v=5.199&callback=parseVkNews";
+    const url = "https://vk.com/" + GROUP_ID + "&count=10&filter=owner&access_token=" + TOKEN + "&v=5.199&callback=parseVkNews";
 
     // Создаем невидимый тег <script> и вставляем его в HTML. 
     // Это обходит любые блокировки CORS и ограничения серверов Vercel!
