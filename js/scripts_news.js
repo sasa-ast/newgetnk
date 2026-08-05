@@ -1,56 +1,68 @@
-// Функция для загрузки новостей
-async function loadNews() {
-    const newsContainer = document.getElementById('news-container'); // Блок в HTML, куда вставим новости
-    
-    try {
-        // Делаем запрос к нашей Serverless-функции
-        const response = await fetch('/api/news');
-        const posts = await response.json();
+// js/news.js
 
-        if (!response.ok) throw new Error(posts.error || 'Ошибка загрузки');
+// 1. Глобальная функция, которую вызовет ВКонтакте, когда пришлет новости
+window.parseVkNews = function(data) {
+    const newsContainer = document.getElementById('news-container');
+    if (!newsContainer) return;
 
-        // Очищаем контейнер от текста "Загрузка..."
-        newsContainer.innerHTML = '';
-
-        // Пробегаемся по каждому посту и создаем HTML-карточку
-        posts.forEach(post => {
-            // Пропускаем пустые посты без текста
-            if (!post.text) return; 
-
-            // Переводим дату из формата Unix в читаемый вид
-            const postDate = new Date(post.date * 1000).toLocaleDateString('ru-RU');
-
-            // Ищем картинку в посте, если она есть
-            let imageUrl = '';
-            if (post.attachments) {
-                const photoAttachment = post.attachments.find(att => att.type === 'photo');
-                if (photoAttachment) {
-                    // Берем URL картинки покрупнее (последний элемент в массиве sizes)
-                    const sizes = photoAttachment.photo.sizes;
-                    imageUrl = sizes[sizes.length - 1].url;
-                }
-            }
-
-            // Создаем HTML-структуру карточки новости
-            const card = document.createElement('div');
-            card.className = 'news-card'; // Стилизуешь в css
-            card.innerHTML = `
-                ${imageUrl ? `<img src="${imageUrl}" alt="Новость" class="news-img">` : ''}
-                <div class="news-content">
-                    <span class="news-date">${postDate}</span>
-                    <p class="news-text">${post.text.substring(0, 200)}...</p> 
-                    <a href="https://vk.com{post.owner_id}_${post.id}" target="_blank" class="news-link">Читать в VK</a>
-                </div>
-            `;
-            
-            newsContainer.appendChild(card);
-        });
-
-    } catch (error) {
-        console.error(error);
-        newsContainer.innerHTML = '<p>Не удалось загрузить новости. Пожалуйста, зайдите позже.</p>';
+    // Проверяем, нет ли ошибки от ВК
+    if (data.error) {
+        console.error("Ошибка ВК:", data.error.error_msg);
+        newsContainer.innerHTML = '<p>Не удалось загрузить новости предприятия.</p>';
+        return;
     }
+
+    const posts = data.response.items;
+    newsContainer.innerHTML = ''; // Очищаем контейнер от текста "Загрузка..."
+
+    // Перебираем посты и строим твои карточки
+    posts.forEach(post => {
+        // Пропускаем посты, если в них нет ни текста, ни вложений
+        if (!post.text && !post.attachments) return;
+
+        const postDate = new Date(post.date * 1000).toLocaleDateString('ru-RU');
+
+        // Ищем картинку в посте
+        let imageUrl = '';
+        if (post.attachments) {
+            const photoAttachment = post.attachments.find(att => att.type === 'photo');
+            if (photoAttachment) {
+                const sizes = photoAttachment.photo.sizes;
+                imageUrl = sizes[sizes.length - 1].url; // Самая крупная картинка
+            }
+        }
+
+        // Создаем HTML-карточку новости в твоем фирменном стиле
+        const card = document.createElement('div');
+        card.className = 'news-card';
+        card.innerHTML = `
+            ${imageUrl ? `<img src="${imageUrl}" alt="Новость" class="news-img">` : ''}
+            <div class="news-content">
+                <span class="news-date">${postDate}</span>
+                <p class="news-text">${post.text ? post.text.substring(0, 200) + '...' : 'Фотоотчет'}</p> 
+                <a href="https://vk.com{post.owner_id}_${post.id}" target="_blank" class="news-link">Читать в VK</a>
+            </div>
+        `;
+        
+        newsContainer.appendChild(card);
+    });
+};
+
+// 2. Функция, которая запрашивает данные у ВК через технологию JSONP
+function loadVkNewsJSONP() {
+    const TOKEN = '49e5481149e5481149e54811dd4aa78ec2449e549e548112397aef0d3149a1a1f131e96';
+    const GROUP_ID = '137432399';
+    
+    // Формируем ссылку. Обрати внимание на параметр callback=parseVkNews в конце!
+    // Он заставляет ВК обернуть ответ в функцию, которую мы создали выше
+    const url = "https://vk.com" + GROUP_ID + "&count=10&filter=owner&access_token=" + TOKEN + "&v=5.199&callback=parseVkNews";
+
+    // Создаем невидимый тег <script> и вставляем его в HTML. 
+    // Это обходит любые блокировки CORS и ограничения серверов Vercel!
+    const script = document.createElement('script');
+    script.src = url;
+    document.body.appendChild(script);
 }
 
-// Запускаем функцию при загрузке страницы
-document.addEventListener('DOMContentLoaded', loadNews);
+// Запускаем загрузку сразу после готовности страницы
+document.addEventListener('DOMContentLoaded', loadVkNewsJSONP);
