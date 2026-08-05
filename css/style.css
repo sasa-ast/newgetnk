@@ -558,7 +558,7 @@ a {
   border: 3px solid var(--dark);
   border-top-color: white;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: spin 0.7s linear infinite;
 }
 
 .preloader_hide {
