@@ -5,14 +5,18 @@ export default async function handler(request, response) {
     response.setHeader('Access-Control-Allow-Methods', 'GET');
     response.setHeader('Content-Type', 'application/json; charset=utf-8');
 
-    // ТВОИ ДАННЫЕ ДЛЯ АВТОРИЗАЦИИ
+    // 1. ТВОИ ДАННЫЕ ДЛЯ АВТОРИЗАЦИИ
     const TOKEN = '49e5481149e5481149e54811dd4aa78ec2449e549e548112397aef0d3149a1a1f131e96'; 
-    const GROUP_ID = '137432399'; // ТОЛЬКО ЦИФРЫ группы предприятия! Без минуса.
+    const GROUP_ID = '137432399'; // Твой ID группы предприятия
     const VERSION = '5.199';
-    const COUNT = 10; 
+    const COUNT = '10'; 
 
-    // Собираем ссылку через обычные плюсы
-    const vkUrl = "https://vk.com" + GROUP_ID + "&count=" + COUNT + "&filter=owner&access_token=" + TOKEN + "&v=" + VERSION;
+    // 2. БЕЗОПАСНАЯ СБОРКА АДРЕСА ПО КУСОЧКАМ (чтобы ничего не потерялось)
+    const base = "https://vk.com";
+    const params = "?owner_id=-" + GROUP_ID + "&count=" + COUNT + "&filter=owner&access_token=" + TOKEN + "&v=" + VERSION;
+    
+    // Итоговый полный URL
+    const vkUrl = base + params;
 
     try {
         const vkResponse = await fetch(vkUrl, {
@@ -49,9 +53,10 @@ export default async function handler(request, response) {
         return response.status(200).json(data.response.items);
 
     } catch (error) {
-        // Защита от падения: выводим ошибку через обычный плюс
+        // Если упал сам сервер — выводим URL, который мы собрали, чтобы проверить его глазами
         return response.status(500).json({ 
-            error: "Критическая ошибка бэкенда: " + error.message 
+            error: "Критическая ошибка бэкенда: " + error.message,
+            attemptedUrl: vkUrl
         });
     }
 }
