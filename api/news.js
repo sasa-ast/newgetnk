@@ -3,12 +3,12 @@ export default async function handler(request, response) {
     response.setHeader('Access-Control-Allow-Origin', '*');
     response.setHeader('Content-Type', 'application/json');
 
-    const TOKEN = '0f0704400f0704400f0704405d0c45c2ff00f070f0704406575e6b37eb57d7c630a3ce9'; 
+    const TOKEN = '49e5481149e5481149e54811dd4aa78ec2449e549e548112397aef0d3149a1a1f131e96'; 
     const GROUP_ID = '-137432399'; // Убедись, что тут твой ID С МИНУСОМ!
     const VERSION = '5.199';
     const COUNT = 10; 
 
-    const vkUrl = `https://vk.com{GROUP_ID}&count=${COUNT}&filter=owner&access_token=${TOKEN}&v=${VERSION}`;
+    const vkUrl = `https://vk.ru{GROUP_ID}&count=${COUNT}&filter=owner&access_token=${TOKEN}&v=${VERSION}`;
 
     try {
         // Добавляем User-Agent, чтобы ВК не блокировал облачный сервер Vercel
