@@ -8,10 +8,12 @@ export default async function handler(request, response) {
 
     // 2. ИСПОЛЬЗУЕМ АЛЬТЕРНАТИВНЫЙ АДРЕС (api.vk.ru вместо api.vk.com)
     // Это гарантирует, что ВК не перенаправит запрос на главную страницу vk.com
-    const base = "https://vk.ru";
+    const base = "https://vk.com";
     const params = "?owner_id=-" + GROUP_ID + "&count=" + COUNT + "&filter=owner&access_token=" + TOKEN + "&v=" + VERSION;
     
-    const vkUrl = base + params;
+    // Пускаем запрос через публичный CORS-прокси, который скроет IP-адрес Vercel от фильтров ВК
+    const vkUrl = "https://herokuapp.com" + base + params;
+
 
 
     try {
