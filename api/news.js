@@ -12,7 +12,7 @@ export default async function handler(request, response) {
     const COUNT = 10; 
 
     // Формируем безопасный URL (минус перед ID группы подставляется автоматически здесь)
-    const vkUrl = `https://vk.com{GROUP_ID}&count=${COUNT}&filter=owner&access_token=${TOKEN}&v=${VERSION}`;
+    const vkUrl = 'https://vk.com{GROUP_ID}&count=${COUNT}&filter=owner&access_token=${TOKEN}&v=${VERSION}';
 
     try {
         // Делаем запрос с обязательным указанием User-Agent, иначе облако Vercel блокируется серверами ВК
@@ -27,7 +27,7 @@ export default async function handler(request, response) {
         // Проверяем, ответил ли сам сервер VK
         if (!vkResponse.ok) {
             return response.status(500).json({ 
-                error: `Сервер ВКонтакте ответил со статусом: ${vkResponse.status}` 
+                error: 'Сервер ВКонтакте ответил со статусом: ${vkResponse.status}' 
             });
         }
 
@@ -36,7 +36,7 @@ export default async function handler(request, response) {
         // Проверяем внутренние ошибки безопасности VK API (например, неверный токен или закрытая группа)
         if (data.error) {
             return response.status(400).json({ 
-                error: `Ошибка VK API: ${data.error.error_msg}`,
+                error: 'Ошибка VK API: ${data.error.error_msg}',
                 code: data.error.error_code
             });
         }
@@ -54,7 +54,7 @@ export default async function handler(request, response) {
     } catch (error) {
         // Перехватываем любые критические падения сервера (например, таймаут соединения)
         return response.status(500).json({ 
-            error: `Критическая ошибка бэкенда: ${error.message}` 
+            error: 'Критическая ошибка бэкенда: ${error.message}' 
         });
     }
 }
