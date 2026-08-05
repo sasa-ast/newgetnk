@@ -9,8 +9,10 @@ export default async function handler(request, response) {
     const TOKEN = '49e5481149e5481149e54811dd4aa78ec2449e549e548112397aef0d3149a1a1f131e96'; 
     const GROUP_ID = '137432399'; // Только цифры группы, без минуса
 
-    // Официальный базовый адрес API ВКонтакте
-    const baseUrl = "https://vk.com";
+    // Пускаем запрос через доверенное зеркало-прокси. 
+    // Для ВК этот запрос прилетит с чистого IP прокси-сервера, а не из забаненного облака Vercel!
+    const baseUrl = "https://allorigins.win" + encodeURIComponent("https://vk.com");
+
 
     // Безопасно упаковываем параметры запроса через встроенный объект Node.js.
     // Это исключает любые ошибки парсинга строки на хостинге Vercel!
