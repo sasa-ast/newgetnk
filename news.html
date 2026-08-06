@@ -7,9 +7,9 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/style_news.css">
     <link rel="shortcut icon" href="images/favicon.png" type="image/x-icon">
-    <script src="js/scripts.js" defer></script>
-    <script src="js/scripts_news.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <script src="js/scripts.js" defer></script>
+    <script type="text/javascript" src="https://vk.com"></script>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
 </head>
@@ -45,14 +45,26 @@
             </nav>
         </div>
     </header>
-    <main class="news-page">
+        <main class="news-page">
         <div class="news-page__container">
             <h1 class="news-page__title">Новости компании</h1>
-        
-
-            <div id="news-container">Загрузка новостей...</div>
+            
+            <!-- ШАГ 2: Пустой блок-контейнер, куда ВК сам вставит ленту -->
+            <div id="vk_groups" style="margin: 0 auto;"></div>
         </div>
     </main>
+
+    <!-- ШАГ 3: Маленький скрипт активации (вставляется прямо здесь, в самом низу HTML) -->
+    <script type="text/javascript">
+        VK.Widgets.Group("vk_groups", {
+            mode: 4,           // Режим только стены с новостями
+            width: "auto",     // Автоматическая ширина по размеру контейнера
+            height: "800",     // Высота ленты в пикселях (можешь сделать больше/меньше)
+            color1: "FFFFFF",  // Белый фон виджета
+            color2: "19191B",  // Цвет текста (твой --dark)
+            color3: "1E90FF"   // Цвет ссылок (твой --blue2)
+        }, 137432399);         // ID группы компании
+    </script>
     <footer class="footer">
             <div class="footer__container">
                 <div class="footer__content">
