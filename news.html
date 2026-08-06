@@ -51,6 +51,25 @@
             
             <div id="vk_groups" style="margin-top: 50px;"></div>
         </div>
+        <script type="text/javascript">
+        function initVkWidget() {
+            if (typeof VK !== 'undefined' && VK.Widgets) {
+                VK.Widgets.Group("vk_groups", {
+                    mode: 4,           // Только стена новостей
+                    width: "auto",     // Адаптивная ширина
+                    height: "800",     // Высота блока
+                    color1: "FFFFFF",  // Белый фон
+                    color2: "19191B",  // Цвет текста
+                    color3: "1E90FF"   // Цвет ссылок
+                }, 137432399);         // ID твоей группы
+                console.log("Виджет ВК успешно инициализирован!");
+            } else {
+                setTimeout(initVkWidget, 100);
+            }
+        }
+
+        initVkWidget();
+    </script>
     </section>
     <footer class="footer">
             <div class="footer__container">
@@ -90,24 +109,5 @@
             <path d="M12 19V5M12 5L5 12M12 5L19 12" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
     </button>
-    <script type="text/javascript">
-        function initVkWidget() {
-            if (typeof VK !== 'undefined' && VK.Widgets) {
-                VK.Widgets.Group("vk_groups", {
-                    mode: 4,           // Только стена новостей
-                    width: "auto",     // Адаптивная ширина
-                    height: "800",     // Высота блока
-                    color1: "FFFFFF",  // Белый фон
-                    color2: "19191B",  // Цвет текста
-                    color3: "1E90FF"   // Цвет ссылок
-                }, 137432399);         // ID твоей группы
-                console.log("Виджет ВК успешно инициализирован!");
-            } else {
-                setTimeout(initVkWidget, 100);
-            }
-        }
-
-        initVkWidget();
-    </script>
 </body>
 </html>
