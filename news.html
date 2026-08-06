@@ -8,7 +8,7 @@
     <link rel="shortcut icon" href="images/favicon.png" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="stylesheet" href="css/global.css">
-    <script src="https://vk.com" type="text/javascript"></script>
+    <script src="https://vk.ru" type="text/javascript"></script>
     <script src="js/scripts.js" defer></script>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
@@ -91,14 +91,23 @@
         </svg>
     </button>
     <script type="text/javascript">
-        VK.Widgets.Group("vk_groups", {
-            mode: 4,
-            width: "auto",
-            height: "800",
-            color1: "FFFFFF",
-            color2: "19191B",
-            color3: "1E90FF"
-        }, 137432399 );
+        function initVkWidget() {
+            if (typeof VK !== 'undefined' && VK.Widgets) {
+                VK.Widgets.Group("vk_groups", {
+                    mode: 4,           // Только стена новостей
+                    width: "auto",     // Адаптивная ширина
+                    height: "800",     // Высота блока
+                    color1: "FFFFFF",  // Белый фон
+                    color2: "19191B",  // Цвет текста
+                    color3: "1E90FF"   // Цвет ссылок
+                }, 137432399);         // ID твоей группы
+                console.log("Виджет ВК успешно инициализирован!");
+            } else {
+                setTimeout(initVkWidget, 100);
+            }
+        }
+
+        initVkWidget();
     </script>
 </body>
 </html>
