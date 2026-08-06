@@ -51,24 +51,34 @@
             <div id="vk_groups" style="margin-top: 50px;"></div>
         </div>
         <script type="text/javascript">
-        function initVkWidget() {
-            if (typeof VK !== 'undefined' && VK.Widgets) {
-                VK.Widgets.Group("vk_groups", {
-                    mode: 4,           // Только стена новостей
-                    width: "auto",     // Адаптивная ширина
-                    height: "800",     // Высота блока
-                    color1: "FFFFFF",  // Белый фон
-                    color2: "19191B",  // Цвет текста
-                    color3: "1E90FF"   // Цвет ссылок
-                }, 137432399);         // ID твоей группы
-                console.log("Виджет ВК успешно инициализирован!");
-            } else {
-                setTimeout(initVkWidget, 100);
-            }
-        }
+            let attempts = 0; // Считаем попытки загрузки
 
-        initVkWidget();
-    </script>
+            function initVkWidget() {
+                attempts++;
+                
+                // Если объект VK прогрузился — запускаем виджет
+                if (typeof VK !== 'undefined' && VK.Widgets) {
+                    VK.Widgets.Group("vk_groups", {
+                        mode: 4,
+                        width: "auto",
+                        height: "800",
+                        color1: "FFFFFF",
+                        color2: "19191B",
+                        color3: "1E90FF"
+                    }, 137432399);
+                    console.log("Виджет ВК успешно инициализирован!");
+                } else if (attempts < 20) { 
+                    // Пробуем снова только если сделали меньше 20 попыток (чтобы не спамить ВК)
+                    setTimeout(initVkWidget, 150);
+                } else {
+                    console.error("Не удалось дождаться загрузки библиотеки VK.");
+                    const container = document.getElementById('vk_groups');
+                    if (container) container.innerHTML = '<p>Не удалось подключиться к ВКонтакте. Попробуйте обновить страницу.</p>';
+                }
+            }
+
+            initVkWidget();
+        </script>
     </section>
     <footer class="footer">
             <div class="footer__container">
